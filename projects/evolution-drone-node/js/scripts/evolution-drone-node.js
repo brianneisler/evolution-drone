@@ -10,12 +10,12 @@
 //-------------------------------------------------------------------------------
 
 var bugpack     = require("bugpack").loadContextSync(module);
-bugpack.loadExportSync("drone.Drone");
-var BugCore     = bugpack.require("BugCore");
+bugpack.loadExportSync("evolution.Drone");
+var Drone       = bugpack.require("evolution.Drone");
 
 
 //-------------------------------------------------------------------------------
 // Exports
 //-------------------------------------------------------------------------------
 
-module.exports = BugCore.getInstance();
+module.exports = Drone.getInstance();

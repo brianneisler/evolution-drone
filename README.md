@@ -1,6 +1,6 @@
-# node-evolution-drone
+# evolution-drone
 
-node-evolution-drone is a node JS library for interfacing with
+evolution-drone is a node JS library for interfacing with
 [Evolution Controller's Drone gamepad](http://www.evolutioncontrollers.com/).
 
 This library provides a basic DeviceManager that continuously scans for Drone devices.
@@ -26,9 +26,9 @@ free to ask!
 
 Using DeviceManager
 ```javascript
-var drone  = require('node-evolution-drone')'
+var evolution  = require('evolution-drone')'
 
-var DeviceManager   = drone.DeviceManager;
+var DeviceManager   = evolution.DeviceManager;
 
 var myDeviceManager = new DeviceManager();
 myDeviceManager.addEventListener(DeviceManager.EventTypes.DEVICE_DETECTED, function(event) {
@@ -49,7 +49,7 @@ myDeviceManager.startScanningForDevices();
 
 ## Dependencies
 
-node-evolution-drone is dependent upon the following libraries
+evolution-drone is dependent upon the following libraries
 [bugcore](https://github.com/airbug/bugcore)
 [bugpack](https://github.com/airbug/bugpack)
 [node-hid](https://github.com/node-hid/node-hid)
@@ -57,14 +57,14 @@ node-evolution-drone is dependent upon the following libraries
 
 ## Download Source
 
-The source is available for download from [GitHub](https://github.com/bneisler/node-evolution-drone)
+The source is available for download from [GitHub](https://github.com/bneisler/evolution-drone)
 
 
 ## Install
 
-For node js, you can install using Node Package Manager [npm](https://www.npmjs.org/package/node-evolution-drone)
+For node js, you can install using Node Package Manager [npm](https://www.npmjs.org/package/evolution-drone)
 
-    npm install node-evolution-drone
+    npm install evolution-drone
 
 
 ## Usage
@@ -74,7 +74,7 @@ In node js:
 npm will install the bugcore, bugpack, and node-hide dependencies
 
 ```javascript
-var drone = require('node-evolution-drone');
+var drone = require('evolution-drone');
 
 
 ```

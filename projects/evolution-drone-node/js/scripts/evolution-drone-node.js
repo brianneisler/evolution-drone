@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014 airbug inc. http://airbug.com
+ * Copyright (c) 2014 Brian Neisler. http://brianneisler.com
  *
- * bugcore may be freely distributed under the MIT license.
+ * evolution-drone may be freely distributed under the MIT license.
  */
 
 

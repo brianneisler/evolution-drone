@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014 airbug inc. http://airbug.com
+ * Copyright (c) 2014 Brian Neisler. http://brianneisler.com
  *
- * bugcore may be freely distributed under the MIT license.
+ * evolution-drone may be freely distributed under the MIT license.
  */
 
 
@@ -9,13 +9,13 @@
 // Annotations
 //-------------------------------------------------------------------------------
 
-//@Export('Drone')
+//@Export('evolution.Device')
 
 //@Require('Class')
-//@Require('Map')
+//@Require('Event')
+//@Require('EventDispatcher')
 //@Require('Obj')
-//@Require('ObjectUtil')
-//@Require('TypeUtil')
+//@Require('evolution.DeviceConnection')
 
 
 //-------------------------------------------------------------------------------
@@ -25,14 +25,21 @@
 require('bugpack').context("*", function(bugpack) {
 
     //-------------------------------------------------------------------------------
+    // Common Modules
+    //-------------------------------------------------------------------------------
+
+    var hid                 = require('node-hid');
+
+
+    //-------------------------------------------------------------------------------
     // BugPack
     //-------------------------------------------------------------------------------
 
-    var Class       = bugpack.require('Class');
-    var Map         = bugpack.require('Map');
-    var Obj         = bugpack.require('Obj');
-    var ObjectUtil  = bugpack.require('ObjectUtil');
-    var TypeUtil    = bugpack.require('TypeUtil');
+    var Class               = bugpack.require('Class');
+    var Event               = bugpack.require('Event');
+    var EventDispatcher     = bugpack.require('EventDispatcher');
+    var Obj                 = bugpack.require('Obj');
+    var DeviceConnection    = bugpack.require('evolution.DeviceConnection');
 
 
     //-------------------------------------------------------------------------------
@@ -41,207 +48,203 @@ require('bugpack').context("*", function(bugpack) {
 
     /**
      * @class
-     * @extends {Obj}
+     * @extends {EventDispatcher}
      */
+    var Device = Class.extend(EventDispatcher, {
 
-
-
-
-
-var Device = Class.extend(EventDispatcher, {
-
-    _name: "drone.Device",
-
-
-    //-------------------------------------------------------------------------------
-    // Constructor
-    //-------------------------------------------------------------------------------
-
-    _constructor: function(device) {
-
-        this._super();
+        _name: "evolution.Device",
 
 
         //-------------------------------------------------------------------------------
-        // Private Properties
+        // Constructor
         //-------------------------------------------------------------------------------
 
         /**
-         * @private
-         * @type {boolean}
+         * @constructs
+         * @param {Device} device
          */
-        this.connected      = false;
+        _constructor: function(device) {
+
+            this._super();
+
+
+            //-------------------------------------------------------------------------------
+            // Private Properties
+            //-------------------------------------------------------------------------------
+
+            /**
+             * @private
+             * @type {boolean}
+             */
+            this.connected      = false;
+
+            /**
+             * @private
+             * @type {DeviceConnection}
+             */
+            this.connection     = null;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.interface      = device.interface;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.manufacturer   = device.manufacturer;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.path           = device.path;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.product        = device.product;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.productId      = device.productId;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.release        = device.release;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.serialNumber   = device.serialNumber;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.vendorId       = device.vendorId;
+        },
+
+
+        //-------------------------------------------------------------------------------
+        // Getters and Setters
+        //-------------------------------------------------------------------------------
 
         /**
-         * @private
-         * @type {DeviceConnection}
+         * @return {DeviceConnection}
          */
-        this.connection     = null;
+        getConnection: function() {
+            return this.connection;
+        },
 
         /**
-         * @private
-         * @type {number}
+         * @param {DeviceConnection} connection
          */
-        this.interface      = device.interface;
+        setConnection: function(connection) {
+            if (this.connection) {
+                this.connection.setParentPropagator(null);
+                this.connection = null;
+            }
+            this.connection = connection;
+            if (this.connection) {
+                this.connection.setParentPropagator(this);
+            }
+        },
 
         /**
-         * @private
-         * @type {string}
+         * @return {string}
          */
-        this.manufacturer   = device.manufacturer;
+        getPath: function() {
+            return this.path;
+        },
 
         /**
-         * @private
-         * @type {string}
+         * @return {string}
          */
-        this.path           = device.path;
+        getProduct: function() {
+            return this.product;
+        },
 
         /**
-         * @private
-         * @type {string}
+         * @return {string}
          */
-        this.product        = device.product;
+        getSerialNumber: function() {
+            return this.serialNumber;
+        },
+
+
+        //-------------------------------------------------------------------------------
+        // Obj Methods
+        //-------------------------------------------------------------------------------
 
         /**
-         * @private
-         * @type {string}
+         * @override
+         * @param {*} value
+         * @return {boolean}
          */
-        this.productId      = device.productId;
+        equals: function(value) {
+            if (Class.doesExtend(value, Device)) {
+                return (Obj.equals(value.getSerialNumber(), this.serialNumber) && Obj.equals(value.getPath(), this.path));
+            }
+            return false;
+        },
 
         /**
-         * @private
-         * @type {number}
+         * @override
+         * @return {number}
          */
-        this.release        = device.release;
+        hashCode: function() {
+            if (!this._hashCode) {
+                this._hashCode = Obj.hashCode("[Device]" +
+                    Obj.hashCode(this.serialNumber) + "_" +
+                    Obj.hashCode(this.path));
+            }
+            return this._hashCode;
+        },
+
+
+        //-------------------------------------------------------------------------------
+        // Public Methods
+        //-------------------------------------------------------------------------------
 
         /**
-         * @private
-         * @type {string}
+         *
          */
-        this.serialNumber   = device.serialNumber;
+        connectToDevice: function() {
+            if (!this.connected) {
+                this.connected = true;
+                var path = this.getPath();
+                var connection = new hid.HID(path);
+                this.setConnection(new DeviceConnection(connection));
+            }
+        },
 
         /**
-         * @private
-         * @type {string}
+         *
          */
-        this.vendorId       = device.vendorId;
-    },
-
-
-    //-------------------------------------------------------------------------------
-    // Getters and Setters
-    //-------------------------------------------------------------------------------
-
-    /**
-     * @return {DeviceConnection}
-     */
-    getConnection: function() {
-        return this.connection;
-    },
-
-    /**
-     * @param {DeviceConnection} connection
-     */
-    setConnection: function(connection) {
-        if (this.connection) {
-            this.connection.setParentPropagator(null);
-            this.connection = null;
+        disconnectFromDevice: function() {
+            if (this.connected) {
+                this.connected = false;
+                this.getConnection().removeListener("data");
+                this.getConnection().removeListener("error");
+                this.setConnection(null);
+            }
         }
-        this.connection = connection;
-        if (this.connection) {
-            this.connection.setParentPropagator(this);
-        }
-    },
-
-    /**
-     * @return {string}
-     */
-    getPath: function() {
-        return this.path;
-    },
-
-    /**
-     * @return {string}
-     */
-    getProduct: function() {
-        return this.product;
-    },
-
-    /**
-     * @return {string}
-     */
-    getSerialNumber: function() {
-        return this.serialNumber;
-    },
-
-
-    //-------------------------------------------------------------------------------
-    // Obj Methods
-    //-------------------------------------------------------------------------------
-
-    /**
-     * @override
-     * @param {*} value
-     * @return {boolean}
-     */
-    equals: function(value) {
-        if (Class.doesExtend(value, Device)) {
-            return (Obj.equals(value.getSerialNumber(), this.serialNumber) && Obj.equals(value.getPath(), this.path));
-        }
-        return false;
-    },
-
-    /**
-     * @override
-     * @return {number}
-     */
-    hashCode: function() {
-        if (!this._hashCode) {
-            this._hashCode = Obj.hashCode("[Device]" +
-                Obj.hashCode(this.serialNumber) + "_" +
-                Obj.hashCode(this.path));
-        }
-        return this._hashCode;
-    },
-
-
-    //-------------------------------------------------------------------------------
-    // Public Methods
-    //-------------------------------------------------------------------------------
-
-    /**
-     *
-     */
-    connectToDevice: function() {
-        if (!this.connected) {
-            this.connected = true;
-            var path = this.getPath();
-            var connection = new HID.HID(path);
-
-            //TODO BRN: Wrap connection in a new class called DeviceConnection
-            this.setConnection(new DeviceConnection(connection));
-        }
-    },
-
-    /**
-     *
-     */
-    disconnectFromDevice: function() {
-        if (this.connected) {
-            this.connected = false;
-            this.getConnection().removeListener("data");
-            this.getConnection().removeListener("error");
-            this.setConnection(null);
-        }
-    }
-});
-
+    });
 
 
     //-------------------------------------------------------------------------------
     // Exports
     //-------------------------------------------------------------------------------
 
-    bugpack.export('evolution.Drone', Drone);
+    bugpack.export('evolution.Device', Device);
 });
 

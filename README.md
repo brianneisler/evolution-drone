@@ -26,7 +26,7 @@ free to ask!
 
 Using DeviceManager
 ```javascript
-var evolution  = require('evolution-drone')'
+var evolution  = require('evolution-drone');
 
 var DeviceManager   = evolution.DeviceManager;
 
@@ -50,9 +50,9 @@ myDeviceManager.startScanningForDevices();
 ## Dependencies
 
 evolution-drone is dependent upon the following libraries
-[bugcore](https://github.com/airbug/bugcore)
-[bugpack](https://github.com/airbug/bugpack)
-[node-hid](https://github.com/node-hid/node-hid)
+* [bugcore](https://github.com/airbug/bugcore)
+* [bugpack](https://github.com/airbug/bugpack)
+* [node-hid](https://github.com/node-hid/node-hid)
 
 
 ## Download Source

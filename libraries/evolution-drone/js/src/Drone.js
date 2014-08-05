@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014 airbug inc. http://airbug.com
+ * Copyright (c) 2014 Brian Neisler. http://brianneisler.com
  *
- * bugcore may be freely distributed under the MIT license.
+ * evolution-drone may be freely distributed under the MIT license.
  */
 
 
@@ -87,18 +87,6 @@ require('bugpack').context("*", function(bugpack) {
              * @type {function(new:DeviceService)}
              */
             this.DeviceService      = DeviceService;
-        },
-
-
-        //-------------------------------------------------------------------------------
-        // Public Methods
-        //-------------------------------------------------------------------------------
-
-        /**
-         * @return {Drone.DeviceService}
-         */
-        newService: function() {
-            return new this.DeviceService();
         }
     });
 
@@ -129,15 +117,6 @@ require('bugpack').context("*", function(bugpack) {
         }
         return Drone.instance;
     };
-
-
-    //-------------------------------------------------------------------------------
-    // Static Proxy
-    //-------------------------------------------------------------------------------
-
-    Drone.proxy(Drone, Proxy.method(Drone.getInstance), [
-        "newService"
-    ]);
 
 
     //-------------------------------------------------------------------------------

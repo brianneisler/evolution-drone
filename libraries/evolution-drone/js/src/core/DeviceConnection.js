@@ -126,7 +126,6 @@ require('bugpack').context("*", function(bugpack) {
          * }}
          */
         convertHexToDataObject: function(hexString) {
-            console.log("hexString:", hexString);
             var hex4 = hexString[4];
             var hex5 = hexString[5];
             var hex6 = hexString[6];
@@ -148,7 +147,7 @@ require('bugpack').context("*", function(bugpack) {
 
             var leftStickY = parseInt(hex6 + hex7, 16);
             if (leftStickY >= 128) {
-                leftStickY = leftStickY - 256;
+                leftStickY = -(leftStickY - 256);
             }
 
             var rightStickX = parseInt(hex8 + hex9, 16);
@@ -158,7 +157,7 @@ require('bugpack').context("*", function(bugpack) {
 
             var rightStickY = parseInt(hex10 + hex11, 16);
             if (rightStickY >= 128) {
-                rightStickY = rightStickY - 256;
+                rightStickY = -(rightStickY - 256);
             }
 
 

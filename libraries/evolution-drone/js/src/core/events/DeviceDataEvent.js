@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014 airbug inc. http://airbug.com
+ * Copyright (c) 2014 Brian Neisler. http://brianneisler.com
  *
- * bugcore may be freely distributed under the MIT license.
+ * evolution-drone may be freely distributed under the MIT license.
  */
 
 
@@ -39,57 +39,25 @@ require('bugpack').context("*", function(bugpack) {
      */
     var DeviceDataEvent = Class.extend(Event, /** @lends {DeviceDataEvent.prototype} */{
 
-        _name: "DeviceDataEvent",
+        _name: "evolution.DeviceDataEvent",
 
 
         //-------------------------------------------------------------------------------
-        // Constructor
-        //-------------------------------------------------------------------------------
-
-        /**
-         * @constructs
-         * @param {string} type
-         * @param {{}} data
-         */
-        _constructor: function(type, data) {
-
-            this._super(type, data);
-
-
-            //-------------------------------------------------------------------------------
-            // Private Properties
-            //-------------------------------------------------------------------------------
-
-            /**
-             * @private
-             * @type {string}
-             */
-            this.currentState   = currentState;
-
-            /**
-             * @private
-             * @type {string}
-             */
-            this.previousState  = previousState;
-        },
-
-
-        //-------------------------------------------------------------------------------
-        // Getters and Setters
+        // Convenience Methods
         //-------------------------------------------------------------------------------
 
         /**
-         * @return {string}
+         * @return {boolean}
          */
-        getCurrentState: function() {
-            return this.currentState;
+        isXButtonPressed: function() {
+            return this.data.x;
         },
 
         /**
-         * @return {string}
+         * @return {boolean}
          */
-        getPreviousState: function() {
-            return this.previousState;
+        isYButtonPressed: function() {
+            return this.data.y;
         }
     });
 

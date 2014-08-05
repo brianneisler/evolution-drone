@@ -44,7 +44,7 @@ var uglifyjs            = enableModule("uglifyjs");
 //-------------------------------------------------------------------------------
 
 var name                = "evolution-drone";
-var version             = "0.0.1";
+var version             = "0.0.2";
 var dependencies        = {
     bugpack: "0.1.14",
     "node-hid": "0.3.1"

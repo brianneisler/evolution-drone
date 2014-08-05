@@ -16,6 +16,7 @@
 //@Require('Proxy')
 //@Require('evolution.Device')
 //@Require('evolution.DeviceConnection')
+//@Require('evolution.DeviceDataEvent')
 //@Require('evolution.DeviceManager')
 //@Require('evolution.DeviceService')
 
@@ -35,6 +36,7 @@ require('bugpack').context("*", function(bugpack) {
     var Proxy               = bugpack.require('Proxy');
     var Device              = bugpack.require('evolution.Device');
     var DeviceConnection    = bugpack.require('evolution.DeviceConnection');
+    var DeviceDataEvent     = bugpack.require('evolution.DeviceDataEvent');
     var DeviceManager       = bugpack.require('evolution.DeviceManager');
     var DeviceService       = bugpack.require('evolution.DeviceService');
 
@@ -77,6 +79,11 @@ require('bugpack').context("*", function(bugpack) {
              * @type {function(new:DeviceConnection)}
              */
             this.DeviceConnection   = DeviceConnection;
+
+            /**
+             * @type {function(new:DeviceDataEvent)}
+             */
+            this.DeviceDataEvent    = DeviceDataEvent;
 
             /**
              * @type {function(new:DeviceManager)}

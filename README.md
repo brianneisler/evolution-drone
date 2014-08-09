@@ -14,7 +14,7 @@ This library is a work in progress and a side hobby of mine. If you have interes
 contributing or specific requests, please feel free to open up an issue on github and
 I will get back to you.
 
-Latest Version `0.0.2`
+Latest Version `0.0.3`
 
 NOTE: This documentation is still being written. If you click on a link and it
 doesn't go anywhere, it's likely because that portion of the docs hasn't been
@@ -125,7 +125,7 @@ __Class__
  */
 var Device = Class.extend(EventDispatcher, {
 ```
-[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.2/libraries/evolution-drone/js/src/core/Device.js)
+[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.3/libraries/evolution-drone/js/src/core/Device.js)
 
 
 __Extends__

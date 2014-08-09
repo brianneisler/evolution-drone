@@ -90,14 +90,6 @@ require('bugpack').context("*", function(bugpack) {
             this.hidConnection.on("error", this.passErrorEvent);
         },
 
-        /**
-         * @private
-         */
-        _deinitializer: function() {
-            this.hidConnection.removeListener("data", this.passDataEvent);
-            this.hidConnection.removeListener("error", this.passErrorEvent);
-        },
-
 
         //-------------------------------------------------------------------------------
         // Getters and Setters
@@ -108,6 +100,26 @@ require('bugpack').context("*", function(bugpack) {
          */
         getHidConnection: function() {
             return this.hidConnection;
+        },
+
+
+        //-------------------------------------------------------------------------------
+        // Public Methods
+        //-------------------------------------------------------------------------------
+
+        /**
+         *
+         */
+        closeConnection: function() {
+            this.hidConnection.close();
+        },
+
+        /**
+         *
+         */
+        destroy: function() {
+            this.hidConnection.removeListener("data", this.passDataEvent);
+            this.hidConnection.removeListener("error", this.passErrorEvent);
         },
 
 
@@ -160,7 +172,6 @@ require('bugpack').context("*", function(bugpack) {
                 rightStickY = -(rightStickY - 256);
             }
 
-
             return {
                 a: hex15 === "1" || hex15 === "3" || hex15 === "9" || hex15 === "b",
                 b: hex15 === "2" || hex15 === "3" || hex15 === "a" || hex15 === "b",
@@ -211,10 +222,6 @@ require('bugpack').context("*", function(bugpack) {
             this.dispatchEvent(new Event(DeviceConnection.EventTypes.ERROR, {
                 error: error
             }));
-            console.log("error:", error);
-            if (err.message === "could not read from HID device") {
-                disconnectFromDevice();
-            }
         }
     });
 

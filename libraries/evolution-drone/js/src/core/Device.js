@@ -61,9 +61,18 @@ require('bugpack').context("*", function(bugpack) {
 
         /**
          * @constructs
-         * @param {Device} device
+         * @param {{
+         *      interface: number,
+         *      manufacturer: string,
+         *      path: string,
+         *      product: string,
+         *      productId: string,
+         *      release: number,
+         *      serialNumber: string,
+         *      vendorId: string
+         * }} hidDevice
          */
-        _constructor: function(device) {
+        _constructor: function(hidDevice) {
 
             this._super();
 
@@ -88,55 +97,62 @@ require('bugpack').context("*", function(bugpack) {
              * @private
              * @type {number}
              */
-            this.interface      = device.interface;
+            this.interface      = hidDevice.interface;
 
             /**
              * @private
              * @type {string}
              */
-            this.manufacturer   = device.manufacturer;
+            this.manufacturer   = hidDevice.manufacturer;
 
             /**
              * @private
              * @type {string}
              */
-            this.path           = device.path;
+            this.path           = hidDevice.path;
 
             /**
              * @private
              * @type {string}
              */
-            this.product        = device.product;
+            this.product        = hidDevice.product;
 
             /**
              * @private
              * @type {string}
              */
-            this.productId      = device.productId;
+            this.productId      = hidDevice.productId;
 
             /**
              * @private
              * @type {number}
              */
-            this.release        = device.release;
+            this.release        = hidDevice.release;
 
             /**
              * @private
              * @type {string}
              */
-            this.serialNumber   = device.serialNumber;
+            this.serialNumber   = hidDevice.serialNumber;
 
             /**
              * @private
              * @type {string}
              */
-            this.vendorId       = device.vendorId;
+            this.vendorId       = hidDevice.vendorId;
         },
 
 
         //-------------------------------------------------------------------------------
         // Getters and Setters
         //-------------------------------------------------------------------------------
+
+        /**
+         * @return {boolean}
+         */
+        getConnected: function() {
+            return this.connected;
+        },
 
         /**
          * @return {DeviceConnection}
@@ -151,12 +167,28 @@ require('bugpack').context("*", function(bugpack) {
         setConnection: function(connection) {
             if (this.connection) {
                 this.connection.setParentPropagator(null);
+                this.connection.removeEventListener(DeviceConnection.EventTypes.ERROR, this.hearDeviceConnectionError, this);
                 this.connection = null;
             }
             this.connection = connection;
             if (this.connection) {
                 this.connection.setParentPropagator(this);
+                this.connection.addEventListener(DeviceConnection.EventTypes.ERROR, this.hearDeviceConnectionError, this);
             }
+        },
+
+        /**
+         * @return {number}
+         */
+        getInterface: function() {
+            return this.interface;
+        },
+
+        /**
+         * @return {string}
+         */
+        getManufacturer: function() {
+            return this.manufacturer;
         },
 
         /**
@@ -176,8 +208,29 @@ require('bugpack').context("*", function(bugpack) {
         /**
          * @return {string}
          */
+        getProductId: function() {
+            return this.productId;
+        },
+
+        /**
+         * @return {number}
+         */
+        getRelease: function() {
+            return this.release;
+        },
+
+        /**
+         * @return {string}
+         */
         getSerialNumber: function() {
             return this.serialNumber;
+        },
+
+        /**
+         * @return {string}
+         */
+        getVendorId: function() {
+            return this.vendorId;
         },
 
 
@@ -233,9 +286,38 @@ require('bugpack').context("*", function(bugpack) {
         disconnectFromDevice: function() {
             if (this.connected) {
                 this.connected = false;
-                this.getConnection().removeListener("data");
-                this.getConnection().removeListener("error");
-                this.setConnection(null);
+                this.getConnection().closeConnection();
+                this.clearConnection();
+            }
+        },
+
+
+        //-------------------------------------------------------------------------------
+        // Private Methods
+        //-------------------------------------------------------------------------------
+
+        /**
+         * @private
+         */
+        clearConnection: function() {
+            this.getConnection().destroy();
+            this.setConnection(null);
+        },
+
+
+        //-------------------------------------------------------------------------------
+        // Event Listeners
+        //-------------------------------------------------------------------------------
+
+        /**
+         * @private
+         * @param {DeviceDataEvent} event
+         */
+        hearDeviceConnectionError: function(event) {
+            var error = event.getData().error;
+            console.log("error:", error);
+            if (error.message === "could not read from HID device") {
+                this.clearConnection();
             }
         }
     });

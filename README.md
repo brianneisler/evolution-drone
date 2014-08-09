@@ -57,7 +57,7 @@ evolution-drone is dependent upon the following libraries
 
 ## Download Source
 
-The source is available for download from [GitHub](https://github.com/bneisler/evolution-drone)
+The source is available for download from [GitHub](https://github.com/brianneisler/evolution-drone)
 
 
 ## Install
@@ -86,5 +86,145 @@ var drone = require('evolution-drone');
 
 * [`Device`](#Device)
 * [`DeviceConnection`](#DeviceConnection)
+* [`DeviceDataEvent`](#DeviceDataEvent)
 * [`DeviceManager`](#DeviceManager)
 * [`DeviceService`](#DeviceService)
+
+
+
+<br /><a name="Device" />
+## Device
+
+Class used to represent a detected Drone device.
+
+
+__Class__
+
+```javascript
+/**
+ * @class
+ * @extends {EventDispatcher}
+ */
+var Device = Class.extend(EventDispatcher, {
+```
+[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.2/libraries/evolution-drone/js/src/core/Device.js)
+
+
+__Extends__
+
+* [`EventDispatcher`](https://github.com/airbug/bugcore#EventDispatcher)
+
+
+__Constructor Summary__
+
+Access | Signature
+--- | ---
+constructor | <code>[Device](#Device_constructor)({{interface: number, manufacturer: string, path: string, product: string, productId: string, release: number, serialNumber: string, vendorId: string}} hidDevice)</code>
+
+
+__Getters and Setters Summary__
+
+Access | Signature | Return Type
+--- | --- | ---
+public | <code>[getConnected](#Device_getConnected)()</code> | <code>{boolean}</code>
+public | <code>[getConnection](#Device_getConnection)()</code> | <code>{[DeviceConnection](#DeviceConnection)}</code>
+public | <code>[setConnection](#Device_setConnection)({[DeviceConnection](#DeviceConnection)} deviceConnection)</code> | None
+public | <code>[getInterface](#Device_getInterface)()</code> | <code>{number}</code>
+public | <code>[getManufacturer](#Device_getManufacturer)()</code> | <code>{string}</code>
+public | <code>[getPath](#Device_getPath)()</code> | <code>{string}</code>
+public | <code>[getProduct](#Device_getProduct)()</code> | <code>{string}</code>
+public | <code>[getProductId](#Device_getProductId)()</code> | <code>{string}</code>
+public | <code>[getRelease](#Device_getRelease)()</code> | <code>{number}</code>
+public | <code>[getSerialNumber](#Device_getSerialNumber)()</code> | <code>{string}</code>
+public | <code>[getVendorId](#Device_getVendorId)()</code> | <code>{string}</code>
+
+
+__Method Summary__
+
+Access | Signature | Return Type
+--- | --- | ---
+public | <code>[connectToDevice](#Device_connectToDevice)()</code> | None
+public | <code>[disconnectFromDevice](#Device_disconnectFromDevice)()</code> | None
+
+
+<br />
+------------------------------------------------------------------------------------
+<br />
+
+<a name="Device_constructor" />
+### Class(hidDevice)
+
+The constructor for a Device
+
+
+__Method__
+
+```javascript
+/**
+ * @constructs
+ * @param {{
+ *      interface: number,
+ *      manufacturer: string,
+ *      path: string,
+ *      product: string,
+ *      productId: string,
+ *      release: number,
+ *      serialNumber: string,
+ *      vendorId: string
+ * }} hidDevice
+ */
+_constructor: function(hidDevice) {
+```
+
+
+__Parameters__
+
+Name | Type | Description
+--- | --- | ---
+`hidDevice` | <code>{{interface: number, manufacturer: string, path: string, product: string, productId: string, release: number, serialNumber: string, vendorId: string}}</code> | The hid device that was output by node-hid
+
+
+__Examples__
+
+Instantiating a Device using node-hid
+```js
+var hid         = require('node-hid');
+var devices     = hid.devices();
+var myDevice    = new Device(devices[0]);
+```
+
+<br />
+------------------------------------------------------------------------------------
+<br />
+
+<a name="Device_getConnected" />
+### Device#getConnected()
+
+Get whether or not a connection is open with this Device
+
+
+__Method__
+
+```javascript
+/**
+ * @return {boolean}
+ */
+getConnected: function() {
+```
+
+__Parameters__
+
+* None
+
+
+__Returns__
+
+* <code>{boolean}</code> - Whether or not a connection is open with the Device.
+
+
+__Examples__
+
+```javascript
+var myDevice    = new Device(devices[0]);
+myDevice.getConnected();    // false, Devices do not automatically have a connection open when they're detected.
+```

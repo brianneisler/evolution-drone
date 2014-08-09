@@ -82,7 +82,7 @@ buildProperties({
             "./libraries/evolution-drone/js/src",
             "../bugcore/libraries/bugcore/js/src",
             "../bugioc/libraries/bugioc/js/src",
-            "../bugmeta/projects/bugmeta/js/src"
+            "../bugmeta/libraries/bugmeta/js/src"
         ],
         scriptPaths: [
             "./projects/evolution-drone-node/js/scripts"
@@ -99,15 +99,15 @@ buildProperties({
                 }
             },
             sourcePaths: [
-                "../buganno/projects/buganno/js/src",
-                "../bugfs/projects/bugfs/js/src",
-                "../bugunit/projects/bugdouble/js/src",
-                "../bugunit/projects/bugunit/js/src",
+                "../buganno/libraries/buganno/js/src",
+                "../bugdouble/libraries/bugdouble/js/src",
+                "../bugfs/libraries/bugfs/js/src",
+                "../bugunit/libraries/bugunit/js/src",
                 "../bugyarn/libraries/bugyarn/js/src"
             ],
             scriptPaths: [
-                "../buganno/projects/buganno/js/scripts",
-                "../bugunit/projects/bugunit/js/scripts"
+                "../buganno/libraries/buganno/js/scripts",
+                "../bugunit/libraries/bugunit/js/scripts"
             ],
             testPaths: [
                 "./libraries/evolution-drone/js/test",
@@ -168,13 +168,11 @@ buildTarget('local').buildFlow(
                         packageJson: buildProject.getProperty("node.packageJson"),
                         packagePaths: {
                             ".": [buildProject.getProperty("node.readmePath")],
-                            "./lib": buildProject.getProperty("node.sourcePaths").concat(
-                                buildProject.getProperty("node.unitTest.sourcePaths")
-                            ),
-                            "./scripts": buildProject.getProperty("node.scriptPaths").concat(
-                                buildProject.getProperty("node.unitTest.scriptPaths")
-                            ),
-                            "./test": buildProject.getProperty("node.unitTest.testPaths")
+                            "./lib": buildProject.getProperty("node.sourcePaths"),
+                            "./scripts": buildProject.getProperty("node.scriptPaths"),
+                            "./test": buildProject.getProperty("node.unitTest.testPaths"),
+                            "./test/lib": buildProject.getProperty("node.unitTest.sourcePaths"),
+                            "./test/scripts": buildProject.getProperty("node.unitTest.scriptPaths")
                         }
                     }
                 }),
@@ -258,13 +256,12 @@ buildTarget('prod').buildFlow(
                     properties: {
                         packageJson: buildProject.getProperty("node.unitTest.packageJson"),
                         packagePaths: {
-                            "./lib": buildProject.getProperty("node.sourcePaths").concat(
-                                buildProject.getProperty("node.unitTest.sourcePaths")
-                            ),
-                            "./scripts": buildProject.getProperty("node.scriptPaths").concat(
-                                buildProject.getProperty("node.unitTest.scriptPaths")
-                            ),
-                            "./test": buildProject.getProperty("node.unitTest.testPaths")
+                            ".": [buildProject.getProperty("node.readmePath")],
+                            "./lib": buildProject.getProperty("node.sourcePaths"),
+                            "./scripts": buildProject.getProperty("node.scriptPaths"),
+                            "./test": buildProject.getProperty("node.unitTest.testPaths"),
+                            "./test/lib": buildProject.getProperty("node.unitTest.sourcePaths"),
+                            "./test/scripts": buildProject.getProperty("node.unitTest.scriptPaths")
                         }
                     }
                 }),

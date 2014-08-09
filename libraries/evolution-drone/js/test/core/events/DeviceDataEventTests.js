@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014 airbug inc. http://airbug.com
+ * Copyright (c) 2014 Brian Neisler. http://brianneisler.com
  *
- * bugcore may be freely distributed under the MIT license.
+ * evolution-drone may be freely distributed under the MIT license.
  */
 
 
@@ -27,18 +27,18 @@ require('bugpack').context("*", function(bugpack) {
     // BugPack
     //-------------------------------------------------------------------------------
 
-    var Class       = bugpack.require('Class');
-    var BugMeta     = bugpack.require('bugmeta.BugMeta');
-    var TestTag     = bugpack.require('bugunit.TestTag');
-    var DeviceDataEvent = bugpack.require('evolution.DeviceDataEvent');
+    var Class               = bugpack.require('Class');
+    var BugMeta             = bugpack.require('bugmeta.BugMeta');
+    var TestTag             = bugpack.require('bugunit.TestTag');
+    var DeviceDataEvent     = bugpack.require('evolution.DeviceDataEvent');
 
 
     //-------------------------------------------------------------------------------
     // Simplify References
     //-------------------------------------------------------------------------------
 
-    var bugmeta     = BugMeta.context();
-    var test        = TestTag.test;
+    var bugmeta             = BugMeta.context();
+    var test                = TestTag.test;
 
 
     //-------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ require('bugpack').context("*", function(bugpack) {
                 "Assert DeviceDataEvent#isYButtonPressed returns testData.y");
         }
     };
-    
+
 
     //-------------------------------------------------------------------------------
     // BugMeta

@@ -7,14 +7,14 @@ This library provides a basic DeviceManager that continuously scans for Drone de
 Once a device is detected, an event will be dispatched that contains the new Device
 instance. You can then use this instance to connect to the Drone controller.
 
-After you connect to a Device, that instance will then emit DeviceEvents that contain
+After you connect to a Device, that instance will then emit DeviceDataEvents that contain
 details of how the controller is being used.
 
 This library is a work in progress and a side hobby of mine. If you have interest in
 contributing or specific requests, please feel free to open up an issue on github and
 I will get back to you.
 
-Latest Version `0.0.1`
+Latest Version `0.0.2`
 
 NOTE: This documentation is still being written. If you click on a link and it
 doesn't go anywhere, it's likely because that portion of the docs hasn't been
@@ -43,6 +43,24 @@ myDeviceManager.addEventListener(DeviceManager.EventTypes.DEVICE_LOST, function(
     // Device was lost, do what you must....
 });
 
+myDeviceManager.startScanningForDevices();
+```
+
+Connecting to a Device and listening for DeviceDataEvents
+```javascript
+var evolution       = require('evolution-drone');
+var DeviceDataEvent = evolution.DeviceDataEvent;
+var DeviceManager   = evolution.DeviceManager;
+
+
+var myDeviceManager = new DeviceManager();
+myDeviceManager.addEventListener(DeviceManager.EventTypes.DEVICE_DETECTED, function(event) {
+    var device = event.getData().device;
+    device.addEventListener(DeviceDataEvent.EventTypes.DATA, function(event) {
+        console.log(event.getData());
+    });
+    device.connectToDevice();
+});
 myDeviceManager.startScanningForDevices();
 ```
 
@@ -228,3 +246,27 @@ __Examples__
 var myDevice    = new Device(devices[0]);
 myDevice.getConnected();    // false, Devices do not automatically have a connection open when they're detected.
 ```
+
+
+<br /><a name="DeviceConnection" />
+## DeviceConnection
+
+TODO
+
+
+<br /><a name="DeviceDataEvent" />
+## DeviceDataEvent
+
+TODO
+
+
+<br /><a name="DeviceManager" />
+## DeviceManager
+
+TODO
+
+
+<br /><a name="DeviceService" />
+## DeviceService
+
+TODO

@@ -14,7 +14,7 @@ This library is a work in progress and a side hobby of mine. If you have interes
 contributing or specific requests, please feel free to open up an issue on github and
 I will get back to you.
 
-Latest Version `0.0.3`
+Latest Version `0.0.4`
 
 NOTE: This documentation is still being written. If you click on a link and it
 doesn't go anywhere, it's likely because that portion of the docs hasn't been
@@ -127,7 +127,7 @@ var Device = Class.extend(EventDispatcher, {
 
     _name: "evolution.Device",
 ```
-[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.3/libraries/evolution-drone/js/src/core/Device.js)
+[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.4/libraries/evolution-drone/js/src/core/Device.js)
 
 
 __Extends__
@@ -323,7 +323,7 @@ var DeviceConnection = Class.extend(EventDispatcher, {
 
     _name: "evolution.DeviceConnection",
 ```
-[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.3/libraries/evolution-drone/js/src/core/DeviceConnection.js)
+[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.4/libraries/evolution-drone/js/src/core/DeviceConnection.js)
 
 
 __Extends__
@@ -374,7 +374,7 @@ var DeviceDataEvent = Class.extend(Event, /** @lends {DeviceDataEvent.prototype}
 
     _name: "evolution.DeviceDataEvent",
 ```
-[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.3/libraries/evolution-drone/js/src/core/events/DeviceDataEvent.js)
+[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.4/libraries/evolution-drone/js/src/core/events/DeviceDataEvent.js)
 
 
 __Extends__

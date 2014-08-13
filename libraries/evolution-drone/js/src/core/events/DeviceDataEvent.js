@@ -47,6 +47,38 @@ require('bugpack').context("*", function(bugpack) {
         //-------------------------------------------------------------------------------
 
         /**
+         * @return {{
+         *      a: boolean,
+         *      b: boolean,
+         *      x: boolean,
+         *      y: boolean,
+         *      lb: boolean,
+         *      rb: boolean,
+         *      lt: boolean,
+         *      rt: boolean,
+         *      select: boolean,
+         *      start: boolean,
+         *      dup: boolean,
+         *      dleft: boolean,
+         *      dright: boolean,
+         *      ddown: boolean,
+         *      leftStick: {
+         *          x: number,
+         *          y: number,
+         *          pressed: boolean
+         *      },
+         *      rightStick: {
+         *          x: number,
+         *          y: number,
+         *          pressed: boolean
+         *      }
+         * }}
+         */
+        getData: function() {
+            return this._super();
+        },
+
+        /**
          * @returns {{
          *      x: number,
          *      y: number,

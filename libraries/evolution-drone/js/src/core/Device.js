@@ -95,6 +95,12 @@ require('bugpack').context("*", function(bugpack) {
 
             /**
              * @private
+             * @type {{interface: number, manufacturer: string, path: string, product: string, productId: string, release: number, serialNumber: string, vendorId: string}}
+             */
+            this.hidDevice      = hidDevice;
+
+            /**
+             * @private
              * @type {number}
              */
             this.interface      = hidDevice.interface;
@@ -175,6 +181,13 @@ require('bugpack').context("*", function(bugpack) {
                 this.connection.setParentPropagator(this);
                 this.connection.addEventListener(DeviceConnection.EventTypes.ERROR, this.hearDeviceConnectionError, this);
             }
+        },
+
+        /**
+         * @return {{interface: number, manufacturer: string, path: string, product: string, productId: string, release: number, serialNumber: string, vendorId: string}}
+         */
+        getHidDevice: function() {
+            return this.hidDevice;
         },
 
         /**
@@ -300,7 +313,7 @@ require('bugpack').context("*", function(bugpack) {
          * @private
          */
         clearConnection: function() {
-            this.getConnection().destroy();
+            this.getConnection().destroyConnection();
             this.setConnection(null);
         },
 

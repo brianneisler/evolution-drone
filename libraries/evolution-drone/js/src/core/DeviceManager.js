@@ -92,7 +92,7 @@ require('bugpack').context("*", function(bugpack) {
              * @private
              * @type {Set.<Device>}
              */
-            this.foundDevices           = Collections.set();
+            this.detectedDevices        = Collections.set();
 
             /**
              * @private
@@ -115,8 +115,8 @@ require('bugpack').context("*", function(bugpack) {
         /**
          * @return {Set.<Device>}
          */
-        getFoundDevices: function() {
-            return this.foundDevices;
+        getDetectedDevices: function() {
+            return this.detectedDevices;
         },
 
 
@@ -161,19 +161,28 @@ require('bugpack').context("*", function(bugpack) {
             var _this = this;
             var deviceFound = false;
             console.log("Scanning for devices..");
+            var lostDevices = this.detectedDevices.clone();
             var deviceSet   = this.findDevices();
             deviceSet.forEach(function(device) {
                 if (device.getProduct() === "Drone") {
-                    if (!_this.foundDevices.contains(device)) {
+                    if (!_this.detectedDevices.contains(device)) {
                         console.log("Device found! path:", device.getPath());
                         deviceFound = true;
-                        _this.processDeviceFound(device);
+                        _this.processDeviceDetected(device);
+                    } else {
+                        lostDevices.remove(device);
                     }
                 }
             });
 
             if (!deviceFound) {
                 console.log("No new devices found");
+            }
+            if (!lostDevices.isEmpty()) {
+                lostDevices.forEach(function(device) {
+                    console.log("Device lost! path:", device.getPath());
+                    _this.processDeviceLost(device);
+                });
             }
         },
 
@@ -193,20 +202,25 @@ require('bugpack').context("*", function(bugpack) {
 
         /**
          * @private
-         * @return {Device}
+         * @param {Device} device
          */
-        processDeviceFound: function(device) {
-            this.foundDevices.add(device);
+        processDeviceDetected: function(device) {
+            this.detectedDevices.add(device);
             this.dispatchEvent(new Event(DeviceManager.EventTypes.DEVICE_DETECTED, {
                 device: device
             }));
+        },
+
+        /**
+         * @private
+         * @param {Device} device
+         */
+        processDeviceLost: function(device) {
+            this.detectedDevices.remove(device);
+            this.dispatchEvent(new Event(DeviceManager.EventTypes.DEVICE_LOST, {
+                device: device
+            }));
         }
-
-        //-------------------------------------------------------------------------------
-        // Event Listeners
-        //-------------------------------------------------------------------------------
-
-
     });
 
 

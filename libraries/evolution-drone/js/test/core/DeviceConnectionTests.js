@@ -14,7 +14,7 @@
 //@Require('Class')
 //@Require('bugmeta.BugMeta')
 //@Require('bugunit.TestTag')
-//@Require('evolution.Device')
+//@Require('evolution.DeviceConnection')
 
 
 //-------------------------------------------------------------------------------
@@ -27,18 +27,18 @@ require('bugpack').context("*", function(bugpack) {
     // BugPack
     //-------------------------------------------------------------------------------
 
-    var Class       = bugpack.require('Class');
-    var BugMeta     = bugpack.require('bugmeta.BugMeta');
-    var TestTag     = bugpack.require('bugunit.TestTag');
-    var Device      = bugpack.require('evolution.Device');
+    var Class               = bugpack.require('Class');
+    var BugMeta             = bugpack.require('bugmeta.BugMeta');
+    var TestTag             = bugpack.require('bugunit.TestTag');
+    var DeviceConnection    = bugpack.require('evolution.DeviceConnection');
 
 
     //-------------------------------------------------------------------------------
     // Simplify References
     //-------------------------------------------------------------------------------
 
-    var bugmeta     = BugMeta.context();
-    var test        = TestTag.test;
+    var bugmeta             = BugMeta.context();
+    var test                = TestTag.test;
 
 
     //-------------------------------------------------------------------------------
@@ -47,16 +47,20 @@ require('bugpack').context("*", function(bugpack) {
 
     /**
      * This tests
-     * 1) Instantiation of a new Device
+     * 1) Instantiation of a new DeviceConnection
      */
-    var deviceInstantiationTest = {
+    var deviceConnectionInstantiationTest = {
 
         // Setup Test
         //-------------------------------------------------------------------------------
 
         setup: function() {
-            this.testHidDevice = {};
-            this.testDevice = new Device(this.testHidDevice);
+            this.testHidConnection = {
+                on: function(eventType, eventFunction) {
+
+                }
+            };
+            this.testDeviceConnection = new DeviceConnection(this.testHidConnection);
         },
 
 
@@ -64,12 +68,12 @@ require('bugpack').context("*", function(bugpack) {
         //-------------------------------------------------------------------------------
 
         test: function(test) {
-            test.assertTrue(Class.doesExtend(this.testDevice, Device),
-                "Assert instance of Device");
-            test.assertEqual(this.testDevice.getClass().getConstructor(), Device,
-                "Assert #getClass#getConstructor returns Device");
-            test.assertEqual(this.testDevice.getHidDevice(), this.testHidDevice,
-                "Assert Device#getHidDevice returns testHidDevice");
+            test.assertTrue(Class.doesExtend(this.testDeviceConnection, DeviceConnection),
+                "Assert instance of DeviceConnection");
+            test.assertEqual(this.testDeviceConnection.getClass().getConstructor(), DeviceConnection,
+                "Assert #getClass#getConstructor returns DeviceConnection");
+            test.assertEqual(this.testDeviceConnection.getHidConnection(), this.testHidConnection,
+                "Assert DeviceConnection#getHidConnection returns testHidConnection");
         }
     };
 
@@ -78,7 +82,7 @@ require('bugpack').context("*", function(bugpack) {
     // BugMeta
     //-------------------------------------------------------------------------------
 
-    bugmeta.tag(deviceInstantiationTest).with(
-        test().name("Device -  instantiation test")
+    bugmeta.tag(deviceConnectionInstantiationTest).with(
+        test().name("DeviceConnection -  instantiation test")
     );
 });

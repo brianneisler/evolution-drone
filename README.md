@@ -124,6 +124,8 @@ __Class__
  * @extends {EventDispatcher}
  */
 var Device = Class.extend(EventDispatcher, {
+
+    _name: "evolution.Device",
 ```
 [View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.3/libraries/evolution-drone/js/src/core/Device.js)
 
@@ -170,7 +172,7 @@ public | <code>[disconnectFromDevice](#Device_disconnectFromDevice)()</code> | N
 <br />
 
 <a name="Device_constructor" />
-### Class(hidDevice)
+### Device(hidDevice)
 
 The constructor for a Device
 
@@ -248,16 +250,183 @@ myDevice.getConnected();    // false, Devices do not automatically have a connec
 ```
 
 
+<br />
+------------------------------------------------------------------------------------
+<br />
+
+<a name="Device_getConnection" />
+### Device#getConnection()
+
+Get the connection open with this Device, if one has been opened.
+
+
+__Method__
+
+```javascript
+/**
+ * @return {DeviceConnection}
+ */
+getConnection: function() {
+```
+
+__Parameters__
+
+* None
+
+
+__Returns__
+
+* <code>{DeviceConnection}</code> - The connection open with this Device.
+
+
+__Examples__
+
+
+Device does not have a connection when it is instantiated
+```javascript
+var device = new Device();
+device.getConnection();         // null
+```
+
+Device does not have a connection when it is first detected
+```javascript
+myDeviceManager.addEventListener(DeviceManager.EventTypes.DEVICE_DETECTED, function(event) {
+    var device = event.getData().device;
+    device.getConnection()      // null
+});
+```
+
+Device has connection after connectToDevice is called
+```javascript
+myDeviceManager.addEventListener(DeviceManager.EventTypes.DEVICE_DETECTED, function(event) {
+    var device = event.getData().device;
+    device.connectToDevice();
+    device.getConnection()      // {DeviceConnection}
+});
+```
+
+
 <br /><a name="DeviceConnection" />
 ## DeviceConnection
 
-TODO
+Class used to represent a connection to a Drone device.
+
+
+__Class__
+
+```javascript
+/**
+ * @class
+ * @extends {EventDispatcher}
+ */
+var DeviceConnection = Class.extend(EventDispatcher, {
+
+    _name: "evolution.DeviceConnection",
+```
+[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.3/libraries/evolution-drone/js/src/core/DeviceConnection.js)
+
+
+__Extends__
+
+* [`EventDispatcher`](https://github.com/airbug/bugcore#EventDispatcher)
+
+
+__Constructor Summary__
+
+Access | Signature
+--- | ---
+constructor | <code>[DeviceConnection](#DeviceConnection_constructor)({[HID](https://github.com/node-hid/node-hid#complete-api)} hidConnection)</code>
+
+
+__Getters and Setters Summary__
+
+Access | Signature | Return Type
+--- | --- | ---
+public | <code>[getHidConnection](#DeviceConnection_getHidConnection)()</code> | <code>{[HID](https://github.com/node-hid/node-hid#complete-api)}</code>
+
+
+__Method Summary__
+
+Access | Signature | Return Type
+--- | --- | ---
+public | <code>[closeConnection](#DeviceConnection_closeConnection)()</code> | None
+public | <code>[destroyConnection](#DeviceConnection_destroyConnection)()</code> | None
+
+<br />
+------------------------------------------------------------------------------------
+<br />
 
 
 <br /><a name="DeviceDataEvent" />
 ## DeviceDataEvent
 
-TODO
+Class used to represent a data event from the Drone device.
+
+
+__Class__
+
+```javascript
+/**
+ * @class
+ * @extends {Event}
+ */
+var DeviceDataEvent = Class.extend(Event, /** @lends {DeviceDataEvent.prototype} */{
+
+    _name: "evolution.DeviceDataEvent",
+```
+[View code](https://github.com/brianneisler/evolution-drone/blob/v0.0.3/libraries/evolution-drone/js/src/core/events/DeviceDataEvent.js)
+
+
+__Extends__
+
+* [`Event`](https://github.com/airbug/bugcore#Event)
+
+
+__Constructor Summary__
+
+Access | Signature
+--- | ---
+constructor | <code>[DeviceDataEvent](#DeviceDataEvent_constructor)({string} type, {*} data)</code>
+
+
+__Getters and Setters Summary__
+
+Access | Signature | Return Type
+--- | --- | ---
+public | <code>[getData](#DeviceDataEvent_getData)()</code> | <code>{{a: boolean, b: boolean, x: boolean, y: boolean, lb: boolean, rb: boolean, lt: boolean, rt: boolean, select: boolean, start: boolean, dup: boolean, dleft: boolean, dright: boolean, ddown: boolean, leftStick: { x: number, y: number, pressed: boolean }, rightStick: { x: number, y: number, pressed: boolean }}}</code>
+
+
+__Method Summary__
+
+Access | Signature | Return Type
+--- | --- | ---
+public | <code>[getLeftStick](#DeviceDataEvent_getLeftStick)()</code> | <code>{{ x: number, y: number, pressed: boolean }}</code>
+public | <code>[getLeftStickX](#DeviceDataEvent_getLeftStickX)()</code> | <code>{number}</code>
+public | <code>[getLeftStickY](#DeviceDataEvent_getLeftStickY)()</code> | <code>{number}</code>
+public | <code>[getRightStick](#DeviceDataEvent_getRightStick)()</code> | <code>{{ x: number, y: number, pressed: boolean }}</code>
+public | <code>[getRightStickX](#DeviceDataEvent_getRightStickX)()</code> | <code>{number}</code>
+public | <code>[getRightStickY](#DeviceDataEvent_getRightStickY)()</code> | <code>{number}</code>
+public | <code>[isAButtonPressed](#DeviceDataEvent_isAButtonPressed)()</code> | <code>{boolean}</code>
+public | <code>[isBButtonPressed](#DeviceDataEvent_isBButtonPressed)()</code> | <code>{boolean}</code>
+public | <code>[isDirectionDownPressed](#DeviceDataEvent_isDirectionDownPressed)()</code> | <code>{boolean}</code>
+public | <code>[isDirectionLeftPressed](#DeviceDataEvent_isDirectionLeftPressed)()</code> | <code>{boolean}</code>
+public | <code>[isDirectionRightPressed](#DeviceDataEvent_isDirectionRightPressed)()</code> | <code>{boolean}</code>
+public | <code>[isDirectionUpPressed](#DeviceDataEvent_isDirectionUpPressed)()</code> | <code>{boolean}</code>
+public | <code>[isLeftBumperPressed](#DeviceDataEvent_isLeftBumperPressed)()</code> | <code>{boolean}</code>
+public | <code>[isLeftStickPressed](#DeviceDataEvent_isLeftStickPressed)()</code> | <code>{boolean}</code>
+public | <code>[isLeftTriggerPressed](#DeviceDataEvent_isLeftTriggerPressed)()</code> | <code>{boolean}</code>
+public | <code>[isRightBumperPressed](#DeviceDataEvent_isRightBumperPressed)()</code> | <code>{boolean}</code>
+public | <code>[isRightStickPressed](#DeviceDataEvent_isRightStickPressed)()</code> | <code>{boolean}</code>
+public | <code>[isRightTriggerPressed](#DeviceDataEvent_isRightTriggerPressed)()</code> | <code>{boolean}</code>
+public | <code>[isSelectButtonPressed](#DeviceDataEvent_isSelectButtonPressed)()</code> | <code>{boolean}</code>
+public | <code>[isStartButtonPressed](#DeviceDataEvent_isStartButtonPressed)()</code> | <code>{boolean}</code>
+public | <code>[isXButtonPressed](#DeviceDataEvent_isXButtonPressed)()</code> | <code>{boolean}</code>
+public | <code>[isYButtonPressed](#DeviceDataEvent_isYButtonPressed)()</code> | <code>{boolean}</code>
+
+
+<br />
+------------------------------------------------------------------------------------
+<br />
 
 
 <br /><a name="DeviceManager" />

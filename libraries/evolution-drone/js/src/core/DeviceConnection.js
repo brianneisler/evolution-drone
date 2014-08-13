@@ -54,7 +54,7 @@ require('bugpack').context("*", function(bugpack) {
 
         /**
          * @constructs
-         * @param {*} hidConnection
+         * @param {HID} hidConnection
          */
         _constructor: function(hidConnection) {
 
@@ -67,7 +67,7 @@ require('bugpack').context("*", function(bugpack) {
 
             /**
              * @private
-             * @type {*}
+             * @type {HID}
              */
             this.hidConnection  = hidConnection;
         },
@@ -96,7 +96,7 @@ require('bugpack').context("*", function(bugpack) {
         //-------------------------------------------------------------------------------
 
         /**
-         * @return {*}
+         * @return {HID}
          */
         getHidConnection: function() {
             return this.hidConnection;
@@ -117,7 +117,7 @@ require('bugpack').context("*", function(bugpack) {
         /**
          *
          */
-        destroy: function() {
+        destroyConnection: function() {
             this.hidConnection.removeListener("data", this.passDataEvent);
             this.hidConnection.removeListener("error", this.passErrorEvent);
         },
@@ -134,7 +134,27 @@ require('bugpack').context("*", function(bugpack) {
          *      a: boolean,
          *      b: boolean,
          *      x: boolean,
-         *      y: boolean
+         *      y: boolean,
+         *      lb: boolean,
+         *      rb: boolean,
+         *      lt: boolean,
+         *      rt: boolean,
+         *      select: boolean,
+         *      start: boolean,
+         *      dup: boolean,
+         *      dleft: boolean,
+         *      dright: boolean,
+         *      ddown: boolean,
+         *      leftStick: {
+         *          x: number,
+         *          y: number,
+         *          pressed: boolean
+         *      },
+         *      rightStick: {
+         *          x: number,
+         *          y: number,
+         *          pressed: boolean
+         *      }
          * }}
          */
         convertHexToDataObject: function(hexString) {
@@ -159,8 +179,9 @@ require('bugpack').context("*", function(bugpack) {
 
             var leftStickY = parseInt(hex6 + hex7, 16);
             if (leftStickY >= 128) {
-                leftStickY = -(leftStickY - 256);
+                leftStickY = (leftStickY - 256);
             }
+            leftStickY = -leftStickY;
 
             var rightStickX = parseInt(hex8 + hex9, 16);
             if (rightStickX >= 128) {
@@ -169,8 +190,9 @@ require('bugpack').context("*", function(bugpack) {
 
             var rightStickY = parseInt(hex10 + hex11, 16);
             if (rightStickY >= 128) {
-                rightStickY = -(rightStickY - 256);
+                rightStickY = (rightStickY - 256);
             }
+            rightStickY = -rightStickY;
 
             return {
                 a: hex15 === "1" || hex15 === "3" || hex15 === "9" || hex15 === "b",
